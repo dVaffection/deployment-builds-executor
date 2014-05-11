@@ -28,8 +28,7 @@
     },
     "autoload":    {
         "psr-4": {
-            "DvLab\\DeploymentBuildsExecutor\\": "src/",
-            "DvLab\\DeploymentBuildsExecutor\\": "tests/"
+            "DvLab\\DeploymentBuildsExecutor\\": "src/"
         }
     }
 }

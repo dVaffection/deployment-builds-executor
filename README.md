@@ -1,6 +1,8 @@
 Build files executor
 ===
 
+[![Build Status](https://travis-ci.org/dVaffection/deployment-builds-executor.svg?branch=master)](https://travis-ci.org/dVaffection/deployment-builds-executor)
+
 ### Features
 - tracks latest executed file
 - sorts new files in timely order

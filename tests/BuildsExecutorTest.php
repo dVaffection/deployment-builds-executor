@@ -22,6 +22,40 @@ class BuildsExecutorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
+     * @expectedException \UnexpectedValueException
+     */
+    public function buildsDirectoryIsNotReadable()
+    {
+        new BuildsExecutor('not readable', 'does not matter');
+    }
+
+    /**
+     * @test
+     * @expectedException \UnexpectedValueException
+     */
+    public function latestBuildFileIsNotReadable()
+    {
+        new BuildsExecutor(self::$buildsDir, 'does not matter');
+    }
+
+    /**
+     * @test
+     * @expectedException \UnexpectedValueException
+     */
+    public function latestBuildFileIsNotWritable()
+    {
+        $latestBuildFilename = self::createLatestBuildFilename('');
+        $result              = @chmod($latestBuildFilename, 0444);
+        if (false === $result) {
+            $message = sprintf('Can not set file "%s" permissions', $latestBuildFilename);
+            throw new \RuntimeException($message);
+        }
+
+        new BuildsExecutor(self::$buildsDir, $latestBuildFilename);
+    }
+
+    /**
+     * @test
      */
     public function getNewBuilds()
     {
@@ -135,12 +169,22 @@ class BuildsExecutorTest extends \PHPUnit_Framework_TestCase
     private static function createLatestBuildFilename($buildName)
     {
         $filename = self::$buildsDir . DIRECTORY_SEPARATOR . 'latest-build';
-        $bytes    = file_put_contents($filename, $buildName);
+
+        if (file_exists($filename)) {
+            $result = @chmod($filename, 0755);
+            if (false === $result) {
+                $message = sprintf('Can not set file "%s" permissions', $filename);
+                throw new \RuntimeException($message);
+            }
+        }
+
+        $bytes = file_put_contents($filename, $buildName);
         if (false === $bytes) {
             $message = 'Could not create filename: ' . $filename;
             throw new \RuntimeException($message);
 
         }
+
 
         return $filename;
     }

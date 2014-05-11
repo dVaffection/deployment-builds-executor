@@ -23,17 +23,17 @@ class BuildsExecutor
     public function __construct($buildsDir, $latestBuildFilename)
     {
         if (!is_readable($buildsDir)) {
-            $message = sprintf('Directory "%s" is not readable');
+            $message = sprintf('Directory "%s" is not readable', $buildsDir);
             throw new \UnexpectedValueException($message);
         }
 
         if (!is_readable($latestBuildFilename)) {
-            $message = sprintf('`$latestBuildFilename` "%s" is not readable');
+            $message = sprintf('`$latestBuildFilename` "%s" is not readable', $latestBuildFilename);
             throw new \UnexpectedValueException($message);
         }
 
         if (!is_writable($latestBuildFilename)) {
-            $message = sprintf('`$latestBuildFilename` "%s" is not writable');
+            $message = sprintf('`$latestBuildFilename` "%s" is not writable', $latestBuildFilename);
             throw new \UnexpectedValueException($message);
         }
 

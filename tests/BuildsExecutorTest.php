@@ -131,6 +131,25 @@ class BuildsExecutorTest extends \PHPUnit_Framework_TestCase
             $expected = array('success');
             $this->assertSame($expected, $output);
         }
+
+
+        return $latestBuildFilename;
+    }
+
+    /**
+     * @bugifx https://github.com/dVaffection/deployment-builds-executor/issues/4
+     * @test
+     * @depends executeNewBuilds
+     */
+    public function latestBuildNameMustBeANumericString($latestBuildFilename)
+    {
+        $contents = file_get_contents($latestBuildFilename);
+        if (false === $contents) {
+            $message = 'Can not read file: ' . $latestBuildFilename;
+            throw new \RuntimeException($message);
+        }
+
+        $this->assertTrue(is_numeric($contents));
     }
 
     private static function createDir()

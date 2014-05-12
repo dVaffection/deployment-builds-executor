@@ -18,6 +18,7 @@ class BuildsExecutor
     /**
      * @param string $buildsDir
      * @param string $latestBuildFilename
+     *
      * @throws \UnexpectedValueException
      */
     public function __construct($buildsDir, $latestBuildFilename)
@@ -70,7 +71,8 @@ class BuildsExecutor
                 break;
             }
 
-            $this->writeLatestBuildName($file);
+            $latestBuildName = pathinfo($file, PATHINFO_FILENAME);
+            $this->writeLatestBuildName($latestBuildName);
         }
 
         return new Result($returnCode, $output);
@@ -119,7 +121,7 @@ class BuildsExecutor
     {
         $data = @file_get_contents($this->lastBuildFilename);
         if (!empty($data) && !is_numeric($data)) {
-            $message = sprintf('Last build must be an empty or a numeric string, given "%s"', $data);
+            $message = sprintf('Latest build name must be an empty or a numeric string, given "%s"', $data);
             throw new \UnexpectedValueException($message);
         }
 
@@ -128,6 +130,7 @@ class BuildsExecutor
 
     /**
      * @param string $latestBuildName
+     *
      * @throws \RuntimeException
      */
     protected function writeLatestBuildName($latestBuildName)

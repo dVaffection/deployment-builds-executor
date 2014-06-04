@@ -31,36 +31,11 @@ class BuildsExecutorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \UnexpectedValueException
-     */
-    public function latestBuildFileIsNotReadable()
-    {
-        new BuildsExecutor(self::$buildsDir, 'does not matter');
-    }
-
-    /**
-     * @test
-     * @expectedException \UnexpectedValueException
-     */
-    public function latestBuildFileIsNotWritable()
-    {
-        $latestBuildFilename = self::createLatestBuildFilename('');
-        $result              = @chmod($latestBuildFilename, 0444);
-        if (false === $result) {
-            $message = sprintf('Can not set file "%s" permissions', $latestBuildFilename);
-            throw new \RuntimeException($message);
-        }
-
-        new BuildsExecutor(self::$buildsDir, $latestBuildFilename);
-    }
-
-    /**
-     * @test
      */
     public function getNewBuilds()
     {
         // all build files are in place and sorted in timely order
-        $latestBuildFilename = self::createLatestBuildFilename('');
+        $latestBuildFilename = self::$buildsDir . DIRECTORY_SEPARATOR . 'latest-build';
         $buildsExecutor      = new BuildsExecutor(self::$buildsDir, $latestBuildFilename);
         $actual              = $buildsExecutor->getNewBuilds();
         $expected            = array(

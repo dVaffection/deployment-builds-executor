@@ -28,13 +28,10 @@ class BuildsExecutor
             throw new \UnexpectedValueException($message);
         }
 
-        if (!is_readable($latestBuildFilename)) {
-            $message = sprintf('`$latestBuildFilename` "%s" is not readable', $latestBuildFilename);
-            throw new \UnexpectedValueException($message);
-        }
-
-        if (!is_writable($latestBuildFilename)) {
-            $message = sprintf('`$latestBuildFilename` "%s" is not writable', $latestBuildFilename);
+        // `$latestBuildFilename` can be omitted (typical if a package is just installed)
+        $latestBuildDir = pathinfo($latestBuildFilename, PATHINFO_DIRNAME);
+        if (!is_writable($latestBuildDir)) {
+            $message = sprintf('`$latestBuildFilename` directory "%s" is not writable', $latestBuildDir);
             throw new \UnexpectedValueException($message);
         }
 
@@ -119,10 +116,14 @@ class BuildsExecutor
      */
     protected function getLatestBuildName()
     {
-        $data = @file_get_contents($this->lastBuildFilename);
-        if (!empty($data) && !is_numeric($data)) {
-            $message = sprintf('Latest build name must be an empty or a numeric string, given "%s"', $data);
-            throw new \UnexpectedValueException($message);
+        if (file_exists($this->lastBuildFilename)) {
+            $data = @file_get_contents($this->lastBuildFilename);
+            if (!empty($data) && !is_numeric($data)) {
+                $message = sprintf('Latest build name must be an empty or a numeric string, given "%s"', $data);
+                throw new \UnexpectedValueException($message);
+            }
+        } else {
+            $data = '';
         }
 
         return $data;

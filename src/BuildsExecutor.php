@@ -59,7 +59,7 @@ class BuildsExecutor
             }
 
             $fileReturnCode = 0;
-            $fileOutput     = array();
+            $fileOutput     = array($file . ':');
             exec($file, $fileOutput, $fileReturnCode);
 
             $output[] = $fileOutput;

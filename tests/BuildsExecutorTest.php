@@ -103,8 +103,10 @@ class BuildsExecutorTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(0, $result->getReturnCode());
         foreach ($result->getOutput() as $output) {
-            $expected = array('success');
-            $this->assertSame($expected, $output);
+
+            // 0: build filename:
+            // 1: success (or whatever build-file will output)
+            $this->assertSame('success', $output[1]);
         }
 
 
